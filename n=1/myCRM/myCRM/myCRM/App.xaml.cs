@@ -1,4 +1,5 @@
-﻿using System;
+﻿using myCRM.PageModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,9 +12,9 @@ namespace myCRM
     {
         public App()
         {
-            InitializeComponent();
-
-            MainPage = new myCRM.MainPage();
+            var contactList = FreshMvvm.FreshPageModelResolver.ResolvePageModel<ContactListPageModel>();
+            var navContainer = new FreshMvvm.FreshNavigationContainer(contactList);
+            MainPage = navContainer;
         }
 
         protected override void OnStart()
