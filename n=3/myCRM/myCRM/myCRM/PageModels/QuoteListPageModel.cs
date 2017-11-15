@@ -9,12 +9,17 @@ using System.Threading.Tasks;
 
 namespace myCRM.PageModels
 {
-    public class ContactListPageModel : FreshMvvm.FreshBasePageModel
+    public class QuoteListPageModel : FreshMvvm.FreshBasePageModel
     {
-        public List<Contact> ContactList { get; set; }
-        private IDataService _dataService;
+        public List<Quote> QuoteList { get; set; }
         private IUserDialogs _userDialogs;
-        public Contact SelectedContact
+        private IDataService _dataService;
+        public QuoteListPageModel(IDataService DataService, IUserDialogs UserDialogs)
+        {
+            _userDialogs = UserDialogs;
+            _dataService = DataService;
+        }
+        public Quote SelectedQuote
         {
             get
             {
@@ -22,23 +27,17 @@ namespace myCRM.PageModels
             }
             set
             {
-                CoreMethods.PushPageModel<ContactPageModel>(value);
+                CoreMethods.PushPageModel<QuotePageModel>(value);
                 RaisePropertyChanged();
             }
         }
-        public ContactListPageModel(IDataService DataService, IUserDialogs UserDialogs)
-        {
-            _dataService = DataService;
-            _userDialogs = UserDialogs;
-        }
-
         public override async void Init(object initData)
         {
             base.Init(initData);
             _userDialogs.ShowLoading();
             try
             {
-                ContactList = await _dataService.GetContacts();
+                QuoteList = await _dataService.GetQuotes();
             }
             catch (Exception Ex)
             {

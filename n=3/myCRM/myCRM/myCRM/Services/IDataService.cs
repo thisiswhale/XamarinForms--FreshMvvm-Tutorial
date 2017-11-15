@@ -5,14 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Xamarin.Forms;
-
 namespace myCRM.Services
 {
-    public interface IDataService 
+    public interface IDataService
     {
-
-            Task<List<Contact>> GetContacts();
-        
+        Task<List<Contact>> GetContacts();
+        Task<List<Quote>> GetQuotes();
     }
 }

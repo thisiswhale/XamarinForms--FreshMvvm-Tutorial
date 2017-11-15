@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Acr.UserDialogs;
+using myCRM.PageModels;
+using myCRM.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 using Xamarin.Forms;
-using myCRM.PageModels;
-using myCRM.Services;
-using Acr.UserDialogs;
 
 namespace myCRM
 {
@@ -14,19 +14,47 @@ namespace myCRM
     {
         public App()
         {
+            //InitializeComponent();
             SetupIOC();
-
-            var contactList = FreshMvvm.FreshPageModelResolver.ResolvePageModel<ContactListPageModel>();
-            var navContainer = new FreshMvvm.FreshNavigationContainer(contactList);
-            MainPage = navContainer;
+            //SetupSingleNav();
+            //SetupMasterDetail();
+            SetupTabbedNav();
         }
 
-        void SetupIOC()
+        private void SetupIOC()
         {
             FreshMvvm.FreshIOC.Container.Register<IDataService, DataService>();
-            FreshMvvm.FreshIOC.Container.Register<IUserDialogs>(UserDialogs.Instance);
+            FreshMvvm.FreshIOC.Container.Register(UserDialogs.Instance);
         }
 
+        private void SetupSingleNav()
+        {
+            var page = FreshMvvm.FreshPageModelResolver.ResolvePageModel<MenuPageModel>(null);  // does dependency injection
+            var singleNav = new FreshMvvm.FreshNavigationContainer(page);
+            MainPage = singleNav;
+        }
+
+        private void SetupMasterDetail()
+        {
+            var masterDetail = new FreshMvvm.FreshMasterDetailNavigationContainer();
+            masterDetail.AddPage<ContactListPageModel>("Contacts");
+            masterDetail.AddPage<QuoteListPageModel>("Quotes");
+            masterDetail.Init("Menu");
+            MainPage = masterDetail;
+        }
+
+        private void SetupTabbedNav()
+        {
+            var tabbedNav = new FreshMvvm.FreshTabbedNavigationContainer();
+            tabbedNav.AddTab<ContactListPageModel>("Contacts", null);
+            tabbedNav.AddTab<QuoteListPageModel>("Quotes", null);
+            MainPage = tabbedNav;
+        }
+
+        private void SetupMasterDetailNav()
+        {
+
+        }
         protected override void OnStart()
         {
             // Handle when your app starts
